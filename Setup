@@ -1,0 +1,15 @@
+# Write Custom Rules (/etc/snort/rules/custom.rules)
+alert tcp any any -> any 22 (msg:"SSH connection attempt"; sid:1000001; rev:1;)
+alert tcp any any -> any 80 (msg:"Possible HTTP scan"; sid:1000002; rev:1;)
+
+include $RULE_PATH/custom.rules
+
+# Run Snort with Custom Rules
+sudo snort -i eth0 -c /etc/snort/snort.conf -A console
+
+# Simulate TCP Port Scan Attack
+# TCP SYN scan
+sudo nmap -sS <target-ip>
+
+# Analyze Alerts
+cat /var/log/snort/alert
