@@ -1,0 +1,134 @@
+# ----------------------------------------
+# LOCAL RULES - Snort NIDS Project
+# Author: <Your Name>
+# ----------------------------------------
+
+# 🔹 ICMP Ping Detection
+alert icmp any any -> any any (
+    msg:"[ICMP] ICMP test ping detected";
+    sid:1000001;
+    rev:1;
+    priority:3;
+)
+
+# 🔹 HTTP Port 80 Access
+alert tcp any any -> any 80 (
+    msg:"[HTTP] HTTP Port 80 Access Detected";
+    flags: S;
+    flow: to_server, established;
+    sid:1000004;
+    rev:2;
+    priority:2;
+)
+
+# 🔹 HTTP GET Request
+alert tcp any any -> any 80 (
+    msg:"[HTTP] HTTP GET Request Detected";
+    flow: to_server, established;
+    content:"GET";
+    http_method;
+    sid:1000005;
+    rev:2;
+    priority:2;
+)
+
+# 🔹 Generic SYN Packet Detection (Potential Port Scan)
+alert tcp any any -> any any (
+    msg:"[SCAN] Generic SYN packet detected (possible port scan)";
+    flags:S;
+    sid:1000006;
+    rev:1;
+    priority:2;
+)
+
+
+
+# 🔹 Nmap Scan Detection Rules
+alert tcp any any -> any any (
+    msg:"[NMAP] NULL scan detected";
+    flags:0;
+    sid:1000100;
+    rev:1;
+    priority:2;
+)
+
+alert tcp any any -> any any (
+    msg:"[NMAP] FIN scan detected";
+    flags:F;
+    sid:1000101;
+    rev:1;
+    priority:2;
+)
+
+alert tcp any any -> any any (
+    msg:"[NMAP] Xmas scan detected";
+    flags:FPU;
+    sid:1000102;
+    rev:1;
+    priority:2;
+)
+
+alert tcp any any -> any any (
+    msg:"[NMAP] ACK scan detected";
+    flags:A;
+    sid:1000103;
+    rev:1;
+    priority:2;
+)
+
+alert tcp any any -> any any (
+    msg:"[NMAP] SYN scan detected";
+    flags:S;
+    sid:1000104;
+    rev:1;
+    priority:2;
+)
+
+alert tcp any any -> any any (
+    msg:"[NMAP] SYN-ACK detected (TCP Connect scan)";
+    flags:SA;
+    sid:1000105;
+    rev:1;
+    priority:2;
+)
+
+# FTP connection attempt
+alert tcp any any -> any 21 (
+    msg:"[FTP] FTP connection attempt detected";
+    flow:to_server, established;
+    sid:1000200;
+    rev:2;
+    priority:3;
+)
+
+# FTP USER command
+alert tcp any any -> any 21 (
+    msg:"[FTP] FTP USER command detected";
+    flow:to_server, established;
+    content:"USER ";
+    sid:1000201;
+    rev:2;
+    priority:3;
+)
+
+# FTP PASS command
+alert tcp any any -> any 21 (
+    msg:"[FTP] FTP PASS command detected";
+    flow:to_server, established;
+    content:"PASS ";
+    sid:1000202;
+    rev:2;
+    priority:3;
+)
+
+# FTP anonymous login
+alert tcp any any -> any 21 (
+    msg:"[FTP] Anonymous FTP login attempt detected";
+    flow:to_server, established;
+    content:"USER anonymous";
+    sid:1000203;
+    rev:2;
+    priority:2;
+)
+
+
